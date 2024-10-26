@@ -126,6 +126,7 @@ const updateCartItem = async (req, res) => {
 module.exports = {
   addToCart,
   removeFromCart,
-  getCart
+  getCart,
+  updateCartItem
   // Aquí se puede agregar más funciones relacionadas al carrito.
 };
