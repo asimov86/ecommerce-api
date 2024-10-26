@@ -91,6 +91,37 @@ const getCart = asyncHandler(async (req, res) => {
   res.status(200).json(cart);
 });
 
+  // Función para actualizar la cantidad de un producto en el carrito
+const updateCartItem = async (req, res) => {
+  const userId = req.user._id; // Obtener ID del usuario desde el middleware protect
+  const { productId, quantity } = req.body; // Obtener el ID del producto y la nueva cantidad del body
+
+  try {
+    // Buscar el carrito del usuario
+    let cart = await Cart.findOne({ userId });
+
+    if (!cart) {
+      return res.status(404).json({ message: 'El carrito no existe' });
+    }
+
+    // Buscar el producto en el carrito
+    const productIndex = cart.products.findIndex(item => item.productId.toString() === productId);
+
+    if (productIndex === -1) {
+      return res.status(404).json({ message: 'El producto no se encuentra en el carrito' });
+    }
+
+    // Actualizar la cantidad del producto
+    cart.products[productIndex].quantity = quantity;
+
+    await cart.save(); // Guardar los cambios en el carrito
+    res.status(200).json(cart);
+  } catch (error) {
+    res.status(500).json({ message: 'Error al actualizar la cantidad del producto en el carrito', error });
+  }
+};
+
+
 // Exports
 module.exports = {
   addToCart,
