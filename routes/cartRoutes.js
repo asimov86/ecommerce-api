@@ -5,7 +5,7 @@ const { protect } = require('../middleware/authMiddleware');
 const router = express.Router();
 
 router.post('/add', protect, addToCart);
-//router.get('/', protect, getCart);
+router.get('/', protect, getCart);
 router.put('/update', protect, updateCartItem);
 router.delete('/remove', protect, removeFromCart);
 
