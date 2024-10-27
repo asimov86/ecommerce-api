@@ -97,6 +97,13 @@ const updateCartItem = async (req, res) => {
   const { productId, quantity } = req.body; // Obtener el ID del producto y la nueva cantidad del body
 
   try {
+
+    // Buscar el producto en la base de datos
+    const product = await Product.findById(productId);
+    if (!product) {
+      return res.status(404).json({ message: 'Producto no encontrado' });
+    }
+
     // Buscar el carrito del usuario
     let cart = await Cart.findOne({ userId });
 
@@ -111,10 +118,20 @@ const updateCartItem = async (req, res) => {
       return res.status(404).json({ message: 'El producto no se encuentra en el carrito' });
     }
 
+    // Validar stock
+    if (product.stock < quantity) {
+      return res.status(400).json({ message: 'No hay suficiente stock para agregar al carrito' });
+    }
+
     // Actualizar la cantidad del producto
     cart.products[productIndex].quantity = quantity;
 
     await cart.save(); // Guardar los cambios en el carrito
+
+    // Actualizar el stock del producto
+    product.stock -= quantity; // Restar la cantidad del stock
+    await product.save(); // Guardar el producto actualizado
+
     res.status(200).json(cart);
   } catch (error) {
     res.status(500).json({ message: 'Error al actualizar la cantidad del producto en el carrito', error });
