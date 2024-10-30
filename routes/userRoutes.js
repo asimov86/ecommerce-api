@@ -1,5 +1,5 @@
 const express = require('express');
-const { registerUser, authUser, changePassword, verifyUser, requestPasswordReset, resetPassword } = require('../controllers/userController');
+const { registerUser, authUser, changePassword, verifyUser, requestPasswordReset, resetPassword, getUserProfile } = require('../controllers/userController');
 const { protect } = require('../middleware/authMiddleware');
 
 const router = express.Router();
@@ -39,7 +39,7 @@ router.post('/register', registerUser);
 
 /**
  * @swagger
- * /api/users/verify-email:
+ * /api/users/verify:
  *   get:
  *     summary: Verificar la cuenta del usuario a través del enlace enviado al correo
  *     tags: [Users]
@@ -56,7 +56,7 @@ router.post('/register', registerUser);
  *       400:
  *         description: Token inválido o cuenta ya verificada
  */
-router.get('/verify-email', verifyUser);
+router.get('/verify', verifyUser);
 
 /**
  * @swagger
@@ -199,5 +199,7 @@ router.post('/forgot-password', requestPasswordReset); // Solicitar restablecimi
  *         description: Token inválido o datos de entrada inválidos
  */
 router.post('/reset-password', resetPassword); // Restablecer la contraseña con el token
+
+router.get('/profile', protect, getUserProfile);
 
 module.exports = router;
