@@ -138,12 +138,25 @@ const updateCartItem = async (req, res) => {
   }
 };
 
+const getCartItems = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user.id).populate('cart.items.product'); // Asumiendo que el carrito tiene una relación con productos
+
+  if (!user) {
+    res.status(404).json({ message: 'Usuario no encontrado.' });
+    return;
+  }
+
+  res.status(200).json({ cart: user.cart });
+});
+
+
 
 // Exports
 module.exports = {
   addToCart,
   removeFromCart,
   getCart,
-  updateCartItem
+  updateCartItem,
+  getCartItems
   // Aquí se puede agregar más funciones relacionadas al carrito.
 };

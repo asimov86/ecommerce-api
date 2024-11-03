@@ -68,7 +68,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
     const token = generateVerificationToken(user._id); // Genera un token para la verificación
 
-    const verificationLink = `${process.env.FRONTEND_URL}/verify-email?token=${token}`; // Link de verificación
+    const verificationLink = `${process.env.FRONTEND_URL}/verify?token=${token}`; // Link de verificación
 
     // Enviar correo con el token
     await sendEmail(email, 'Verifica tu cuenta', `Hola ${name}, verifica tu cuenta haciendo clic en el siguiente link: ${verificationLink}`);
@@ -193,8 +193,11 @@ const verifyUser = asyncHandler(async (req, res) => {
     // Actualizar el estado del usuario a verificado
     user.isActive = true;
     await user.save();
-
-    res.status(200).json({ message: 'Cuenta verificada con éxito. Ya puedes iniciar sesión.' });
+    // Después de la verificación exitosa, redirigir al frontend
+    res.redirect('http://localhost:3000/login');  
+    //res.status(200).json({ message: 'Cuenta verificada con éxito. Ya puedes iniciar sesión.' });
+    // Redirigir al frontend después de verificar el correo
+    //return res.redirect('http://localhost:3000/login'); // Redirigir a la página de login en tu frontend
   } catch (error) {
     res.status(400).json({ message: 'Token inválido o expirado.' });
   }
@@ -230,6 +233,16 @@ const requestPasswordReset = asyncHandler(async (req, res) => {
   res.status(200).json({ message: 'Correo enviado con el enlace para restablecer la contraseña.' });
 });
 
+const getUserProfile = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id).select('-password'); // Excluir la contraseña de la respuesta
+  if (user) {
+    res.json(user);
+  } else {
+    res.status(404);
+    throw new Error('Usuario no encontrado');
+  }
+});
+
 
 // Exportar funciones
 module.exports = {
@@ -238,5 +251,6 @@ module.exports = {
   changePassword,
   verifyUser,
   requestPasswordReset,
-  resetPassword
+  resetPassword,
+  getUserProfile
 };
