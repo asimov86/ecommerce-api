@@ -58,6 +58,7 @@ router.post('/register', registerUser);
  */
 router.get('/verify', verifyUser);
 
+
 /**
  * @swagger
  * /api/users/change-password:

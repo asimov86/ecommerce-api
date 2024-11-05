@@ -8,6 +8,7 @@ const cartRoutes = require('./routes/cartRoutes');
 const orderRoutes = require('./routes/orderRoutes');
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocs = require('./config/swaggerOptions');
+
 //const path = require('path');
 const cors = require('cors');
 
@@ -30,6 +31,9 @@ app.use(express.json());
 /* app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 }); */
+
+// Configuración de Swagger
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 // Configuración de Swagger
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
