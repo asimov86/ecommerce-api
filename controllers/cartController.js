@@ -33,6 +33,7 @@ const addToCart = asyncHandler(async (req, res) => {
     // Agregar el nuevo producto al carrito
     cart.products.push({
       productId: product._id,
+      imageUrl: product.imageUrl,
       name: product.name,
       price: product.price,
       quantity,

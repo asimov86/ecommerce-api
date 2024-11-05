@@ -41,7 +41,7 @@ const sendEmail = async (to, subject, text) => {
 };
 
 const sendResetEmail = async (email, token) => {
-  const resetLink = `${process.env.FRONTEND_URL}/reset-password?token=${token}`;
+  const resetLink = `${process.env.FRONTEND_URL}/verify?token=${token}`;
 
   await sendEmail(email, 'Restablecer tu contraseña', 
     `Hola, has solicitado restablecer tu contraseña. Haz clic en el siguiente enlace para proceder: ${resetLink}. 

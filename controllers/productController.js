@@ -10,8 +10,8 @@ const Product = require('../models/productModel');
 
 // Crear un nuevo producto
   const createProduct = asyncHandler(async (req, res) => {
-  const { name, description, price, stock, category } = req.body;
-  const product = new Product({ name, description, price, stock, category });
+  const { name, description, price, stock, category, imageUrl } = req.body;
+  const product = new Product({ name, description, price, stock, category, imageUrl });
   
   const savedProduct = await product.save();
   res.status(201).json(savedProduct);
@@ -19,7 +19,7 @@ const Product = require('../models/productModel');
 
 // Actualizar un producto
   const updateProduct = asyncHandler(async (req, res) => {
-  const { name, description, price, stock, category } = req.body;
+  const { name, description, price, stock, category, imageUrl } = req.body;
 
   // Buscar el producto por ID
   const product = await Product.findById(req.params.id);
@@ -30,6 +30,7 @@ const Product = require('../models/productModel');
     if (description !== undefined) product.description = description;
     if (price !== undefined) product.price = price;
     if (stock !== undefined) product.stock = stock;
+    if (imageUrl !== undefined) product.imageUrl = imageUrl;
     if (category !== undefined) product.category = category;
 
     // Guardar el producto actualizado
