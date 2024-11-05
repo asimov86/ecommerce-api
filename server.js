@@ -17,7 +17,10 @@ connectDB();
 const app = express();
 
 // Habilitar CORS para permitir solicitudes desde el frontend en localhost:3000
-app.use(cors({ origin: 'http://localhost:3000' }));
+app.use(cors({
+  origin: 'http://localhost:3000',  // Permite solicitudes desde tu frontend
+  credentials: true,                 // Permite cookies si es necesario
+}));
 
 app.use(express.json());
 // Servir archivos estáticos desde 'public'

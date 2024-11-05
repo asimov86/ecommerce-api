@@ -23,6 +23,10 @@ const productSchema = mongoose.Schema({
   category: {
     type: String,
     required: true,
+  },
+  imageUrl: {  // Nuevo campo para almacenar la URL de la imagen
+    type: String,
+    required: true,  // Si siempre necesitarás una imagen para cada producto
   }
 }, {
   timestamps: true,
