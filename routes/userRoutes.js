@@ -201,6 +201,29 @@ router.post('/forgot-password', requestPasswordReset); // Solicitar restablecimi
  */
 router.post('/reset-password', resetPassword); // Restablecer la contraseña con el token
 
+/**
+ * @swagger
+ * /api/users/profile:
+ *   get:
+ *     summary: Obtener el perfil del usuario autenticado
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []  # Esto habilita la autenticación con Bearer Token
+ *     responses:
+ *       200:
+ *         description: Perfil del usuario obtenido con éxito
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 name:
+ *                   type: string
+ *                 email:
+ *                   type: string
+ *       401:
+ *         description: Falta de autenticación
+ */
 router.get('/profile', protect, getUserProfile);
 
 module.exports = router;

@@ -42,9 +42,31 @@ const Product = require('../models/productModel');
   }
 });
 
+  const deleteProduct = asyncHandler(async (req, res) => {
+
+    const deleteProduct = await Product.deleteOne({_id:req.params.id});
+
+    if (deleteProduct.deleteCount === 0) {
+      res.status(404);
+      throw new Error('Product no encontrado');
+    }
+    res.status(204).send();
+  });
+
+  const getProductById = asyncHandler(async (req, res) => {
+    const product = await Product.findById(req.params.id);
+    if (!product){
+      return res.status(404).json({ message: 'Producto no encontrado' });
+    }
+    res.status(200).json(product);
+
+  });
+
 // Exportar las funciones
 module.exports = {
   getProducts,
   createProduct,
   updateProduct,
+  deleteProduct,
+  getProductById
 };
