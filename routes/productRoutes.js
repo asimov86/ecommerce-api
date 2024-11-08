@@ -1,8 +1,13 @@
 // routes/productRoutes.js
 const express = require('express');
-const { getProducts, createProduct, updateProduct, getProductById, deleteProduct } = require('../controllers/productController');
+const { getProducts, createProduct, updateProduct, getProductById, deleteProduct, uploadProductsFromJson } = require('../controllers/productController');
 const { protect } = require('../middleware/authMiddleware');
+const multer = require('multer');
 const router = express.Router();
+
+// Configurar Multer para subir archivos
+const upload = multer({ dest: 'uploads/' }); // Subirá los archivos a la carpeta 'uploads'
+
 
 // Rutas de productos
 /**
@@ -81,7 +86,7 @@ const router = express.Router();
  */
 router.route('/')
     .post(protect, createProduct)
-    .get(protect, getProducts);
+    .get(getProducts);
 
 /**
  * @swagger
@@ -189,6 +194,8 @@ router.route('/:id')
     .put(protect, updateProduct)
     .get(protect, getProductById)
     .delete(protect, deleteProduct);
+
+router.post('/upload-json', upload.single('file'), uploadProductsFromJson);
 
 module.exports = router;
 
