@@ -98,6 +98,9 @@ const getProducts = asyncHandler(async (req, res) => {
 
   // Controlador para cargar el archivo JSON y agregar productos a la base de datos
 const uploadProductsFromJson = asyncHandler(async (req, res) => {
+    if (!req.file) {
+      return res.status(400).json({ message: 'No se ha subido ningún archivo.' });
+    }
     const filePath = req.file.path; // Ruta temporal del archivo subido
     const fileData = fs.readFileSync(filePath, 'utf8'); // Leer el archivo
     const products = JSON.parse(fileData); // Parsear el archivo JSON
@@ -114,6 +117,13 @@ const uploadProductsFromJson = asyncHandler(async (req, res) => {
     });
 });
 
+// Ruta para obtener categorías únicas
+const categoriesFromProducts = asyncHandler( async (req, res) => {
+    const categories = await Product.distinct('category'); // Obtener categorías únicas
+    res.json({ categories });
+});
+
+
 // Exportar las funciones
 module.exports = {
   getProducts,
@@ -121,5 +131,6 @@ module.exports = {
   updateProduct,
   deleteProduct,
   getProductById,
-  uploadProductsFromJson
+  uploadProductsFromJson,
+  categoriesFromProducts
 };
